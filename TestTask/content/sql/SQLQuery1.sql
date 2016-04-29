@@ -1,5 +1,10 @@
 create database DataFolder
+
+GO
 use DataFolder
+
+GO
+
 create table Folders
 (
 	Id int not null identity(1,1),
@@ -8,7 +13,9 @@ create table Folders
 	ParentId int
 
 	constraint pk_folders_id primary key(Id)
-)
+);
+
+GO
 
 CREATE TABLE Files (
 	Id int not null identity(1,1),
@@ -20,15 +27,3 @@ CREATE TABLE Files (
 	constraint fk_files_parentFolderId_folders_id
 	foreign key (ParentFolderId) references Folders(Id)
 );
-
-
-insert into Files([FileName], [DocumentFile]) 
-select ('ring.wav') as FileName, * 
-from openrowset(bulk 'D:\ring.wav', single_blob) as DocumentFile
- 
-insert into Files(ParentFolderId, [FileName], [DocumentFile]) VALUES (2, 'ring.wav', 'D:\ring.wav')
-
-select * from Files
-select * from Folders
-drop table Folders
-drop table Files
