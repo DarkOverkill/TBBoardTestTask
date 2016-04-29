@@ -37,7 +37,7 @@ namespace TestTask
                 {
                     space += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
-                html += String.Format("<div id='{1}'>{4}<img src='content/folder.jpg' />{0}<button type='button' id='add_{2}' class='send glyphicon glyphicon-plus' runat='server' title='add folder'" +
+                html += String.Format("<div class='folder'>{4}<img src='content/folder.jpg' />{0}<button type='button' id='add_{2}' class='send glyphicon glyphicon-plus' runat='server' title='add folder'" +
                 "data-folder-level='{3}' data-folder-parent='{2}'></button><button class='loadFile glyphicon glyphicon-download-alt' title='Load file' runat='server' id='load_{2}'>"+
                 "</button>", d.Name, d.Level, d.Id, (d.Level + 1), space) + ShowChildren(d.Id, d.Level + 1);
                 html += GetFilesByFolderId(d.Id) + "</div >";

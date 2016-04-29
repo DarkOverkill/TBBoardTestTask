@@ -11,6 +11,7 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="Scripts/page/AjaxRequests.js"></script>
         <link href="content/css/MyStyles.css" rel="stylesheet" />
+        <script src="Scripts/page/HideChild.js"></script>
 </head>
 <body>
     
@@ -30,7 +31,7 @@
 
     <%var data = TestTask.Repository.GetRepository().GetMainFolders();
         foreach(var d in data){
-            string html = String.Format("<div id='{1}'><img src='content/folder.jpg' />{0}<button type='button' id='add_{2}' class='send glyphicon glyphicon-plus' runat='server' title='add folder'"+
+            string html = String.Format("<div class='folder'><img src='content/folder.jpg' />{0}<button type='button' id='add_{2}' class='send glyphicon glyphicon-plus' runat='server' title='add folder'"+
          "data-folder-level='{3}' data-folder-parent='{2}'></button><button class='loadFile glyphicon glyphicon-download-alt' title='Load file' runat='server' id='load_{2}'></button>", d.Name, d.Level, d.Id, (d.Level +1));
             Response.Write(html);
             
