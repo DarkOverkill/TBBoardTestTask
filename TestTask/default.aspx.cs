@@ -24,7 +24,6 @@ namespace TestTask
             folder.Name = folderName.Value;
             Repository.GetRepository().AddFolder(folder);
             Page.Response.Redirect(Page.Request.Url.ToString(), true);
-            //lblInfo.Text = b.Attributes["data-folder-parent"];
         }
         protected string ShowChildren(int parentId, int level)
         {
@@ -49,17 +48,58 @@ namespace TestTask
         {
             List<DataFile> files = new List<DataFile>();
             files = Repository.GetRepository().GetFilesByFolderId(id);
-            int level = Repository.GetRepository().GetFolderLevel(id);
-            string html = "<div>";
+            DataFolder folder = Repository.GetRepository().GetFolderById(id);
+            string html = "";
             foreach (DataFile f in files)
             {
-                for (int i = 0; i < level; i++)
+                html += "<div>";
+                for (int i = 0; i < folder.Level; i++)
                 {
                     html += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 html += String.Format("<img src='content/file.jpg' />{0}</div>", f.FileName);
             }           
             return html;
+        }
+
+        protected void SearchFilesByName(object sender, EventArgs e)
+        {
+            List<DataFile> files = new List<DataFile>();
+            files = Repository.GetRepository().GetFilesByName(searchFiles.Value);
+            string sendHtml = "";
+            string html = "";
+           
+            foreach (DataFile f in files)
+            {
+                html = "";
+                html += f.FileName;                
+                DataFolder folder = Repository.GetRepository().GetFolderById(f.ParentFolderId);
+                html = html.Insert(0, folder.Name + "/");
+                if (folder.Level > 0)
+                {
+                   GetParentFolder(folder.ParentId, ref html);
+                }
+
+                html = html.Insert(0, "<br>");
+
+                sendHtml += html;
+            }
+            lblInfo.Text = sendHtml;
+
+        }
+        protected DataFolder GetParentFolder(int folderId, ref string html)
+        {
+            DataFolder folder = Repository.GetRepository().GetFolderById(folderId);
+            if (folder.Level > 0)
+            {
+                html = html.Insert(0, folder.Name + "/");
+                GetParentFolder(folder.ParentId, ref html);
+            }
+            else if (folder.Level == 0)
+            {
+                html = html.Insert(0, folder.Name + "/");
+            }
+            return folder;
         }
 
         [System.Web.Services.WebMethod]

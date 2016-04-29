@@ -45,6 +45,33 @@ namespace TestTask
             }
             return sqlDataFile;
         }
+        public List<DataFile> GetFilesByName(string fileName)
+        {
+            sqlDataFile = new List<DataFile>();
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = "SELECT * FROM Files WHERE [FileName] = '" + fileName + "'";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DataFile file = new DataFile();
+                            file.Id = (int)reader["Id"];
+                            file.FileName = (string)reader["FileName"];
+                            file.ParentFolderId = (int)reader["ParentFolderId"];
+                            sqlDataFile.Add(file);
+                        }
+                    }
+                }
+            }
+            return sqlDataFile;
+        }
+
         public void AddFile(HttpPostedFile file, int folderId)
         {
             //GetAll();
@@ -100,10 +127,9 @@ namespace TestTask
             }
             return sqlDataFolder;
         }
-        public int GetFolderLevel(int folderId)
+        public DataFolder GetFolderById(int folderId)
         {
-            //sqlDataFolder = new List<DataFolder>();
-            int level = 0;
+            DataFolder folder = new DataFolder();
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -111,17 +137,20 @@ namespace TestTask
                 {
                     command.Connection = connection;
                     command.CommandType = System.Data.CommandType.Text;
-                    command.CommandText = "SELECT [Level] FROM Folders WHERE Id = " + folderId;
+                    command.CommandText = "SELECT * FROM Folders WHERE Id = " + folderId;
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
-                        {
-                            level = (int)reader["Level"];
+                        {                       
+                            folder.Id = (int)reader["Id"];
+                            folder.Name = (string)reader["Name"];
+                            folder.Level = (int)reader["Level"];
+                            folder.ParentId = (int)reader["ParentId"];
                         }
                     }
                 }
             }
-            return level;
+            return folder;
         }
         public List<DataFolder> GetMainFolders()
         {

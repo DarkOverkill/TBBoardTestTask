@@ -100,6 +100,7 @@
     <Content Include="Scripts\lib\jquery\jquery-2.1.4.js" />
     <Content Include="Scripts\lib\jquery\jquery-2.1.4.min.js" />
     <Content Include="Scripts\page\AjaxRequests.js" />
+    <Content Include="Scripts\page\HideChild.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
