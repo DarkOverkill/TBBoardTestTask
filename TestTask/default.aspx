@@ -10,6 +10,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="Scripts/page/AjaxRequests.js"></script>
+        <link href="content/css/MyStyles.css" rel="stylesheet" />
 </head>
 <body>
     
@@ -38,6 +39,7 @@
             Response.Write(html);
             
             Response.Write(ShowChildren(d.Id, d.Level + 1));
+            Response.Write(GetFilesByFolderId(d.Id));
             Response.Write("</div>");
         }
     %>

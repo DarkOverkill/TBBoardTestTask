@@ -39,8 +39,26 @@ namespace TestTask
                     space += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 html += String.Format("<div id='{1}'>{4}<img src='content/folder.jpg' />{0}<button type='button' id='add_{2}' class='send glyphicon glyphicon-plus' runat='server' title='add folder'" +
-                "data-folder-level='{3}' data-folder-parent='{2}'></button><button class='loadFile glyphicon glyphicon-download-alt' title='Load file' runat='server' id='load_{2}'></button>", d.Name, d.Level, d.Id, (d.Level + 1), space) + ShowChildren(d.Id, d.Level + 1) + "</div >";
+                "data-folder-level='{3}' data-folder-parent='{2}'></button><button class='loadFile glyphicon glyphicon-download-alt' title='Load file' runat='server' id='load_{2}'>"+
+                "</button>", d.Name, d.Level, d.Id, (d.Level + 1), space) + ShowChildren(d.Id, d.Level + 1);
+                html += GetFilesByFolderId(d.Id) + "</div >";
             }
+            return html;
+        }
+        protected string GetFilesByFolderId(int id)
+        {
+            List<DataFile> files = new List<DataFile>();
+            files = Repository.GetRepository().GetFilesByFolderId(id);
+            int level = Repository.GetRepository().GetFolderLevel(id);
+            string html = "<div>";
+            foreach (DataFile f in files)
+            {
+                for (int i = 0; i < level; i++)
+                {
+                    html += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+                html += String.Format("<img src='content/file.jpg' />{0}</div>", f.FileName);
+            }           
             return html;
         }
 
@@ -51,18 +69,7 @@ namespace TestTask
             folder.Level = Convert.ToInt32(Level);
             folder.ParentId = Convert.ToInt32(parentId);
             folder.Name = Name;
-            Repository.GetRepository().AddFolder(folder);
-        }
-
-        [System.Web.Services.WebMethod]
-        public static void LoadFile(string parentFolderId, string fileName, HttpPostedFile file)
-        {
-            DataFilePath new_file = new DataFilePath();
-            new_file.ParentFolderId = Convert.ToInt32(parentFolderId);
-            new_file.FileName = fileName;
-            new_file.FilePath = file.ContentLength;
-            
-            Repository.GetRepository().AddFile(new_file);
-        }
+            Repository.GetRepository().AddFolder(folder);           
+        }     
     }
 }
